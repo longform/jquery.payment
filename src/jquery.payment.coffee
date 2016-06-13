@@ -9,7 +9,7 @@ $.fn.payment = (method, args...) ->
 defaultFormat = /(\d{1,4})/g
 
 $.payment.cards = cards = [
-  # Specifics patterns must be analysed first or it 
+  # Specifics patterns must be analysed first or it
   # will generate false positives
   {
     type: 'elo'
@@ -308,19 +308,19 @@ formatExpiry = (e) ->
 
   if /^\d$/.test(val) and val not in ['0', '1']
     e.preventDefault()
-    setTimeout -> $target.val("0#{val} / ")
+    setTimeout -> $target.val("0#{val}/")
 
   else if /^\d\d$/.test(val)
     e.preventDefault()
     setTimeout ->
       # Split for months where we have the second digit > 2 (past 12) and turn
-      # that into (m1)(m2) => 0(m1) / (m2)
+      # that into (m1)(m2) => 0(m1)/(m2)
       m1 = parseInt(val[0], 10)
       m2 = parseInt(val[1], 10)
       if m2 > 2 and m1 != 0
-        $target.val("0#{m1} / #{m2}")
+        $target.val("0#{m1}/#{m2}")
       else
-        $target.val("#{val} / ")
+        $target.val("#{val}/")
 
 formatForwardExpiry = (e) ->
   digit = String.fromCharCode(e.which)
@@ -330,7 +330,7 @@ formatForwardExpiry = (e) ->
   val     = $target.val()
 
   if /^\d\d$/.test(val)
-    $target.val("#{val} / ")
+    $target.val("#{val}/")
 
 formatForwardSlashAndSpace = (e) ->
   which = String.fromCharCode(e.which)
@@ -340,7 +340,7 @@ formatForwardSlashAndSpace = (e) ->
   val     = $target.val()
 
   if /^\d$/.test(val) and val isnt '0'
-    $target.val("0#{val} / ")
+    $target.val("0#{val}/")
 
 formatBackExpiry = (e) ->
   $target = $(e.currentTarget)
@@ -354,9 +354,9 @@ formatBackExpiry = (e) ->
     $target.prop('selectionStart') isnt value.length
 
   # Remove the trailing space + last digit
-  if /\d\s\/\s$/.test(value)
+  if /\d\/$/.test(value)
     e.preventDefault()
-    setTimeout -> $target.val(value.replace(/\d\s\/\s$/, ''))
+    setTimeout -> $target.val(value.replace(/\d\/$/, ''))
 
 # Format CVC
 
@@ -492,7 +492,7 @@ $.payment.fn.cardExpiryVal = ->
   $.payment.cardExpiryVal($(this).val())
 
 $.payment.cardExpiryVal = (value) ->
-  [month, year] = value.split(/[\s\/]+/, 2)
+  [month, year] = value.split(/[\/]+/, 2)
 
   # Allow for year shortcut
   if year?.length is 2 and /^\d+$/.test(year)
@@ -592,17 +592,17 @@ $.payment.formatExpiry = (expiry) ->
   year = parts[3] || ''
 
   if year.length > 0
-    sep = ' / '
+    sep = '/'
 
-  else if sep is ' /'
+  else if sep is '/'
     mon = mon.substring(0, 1)
     sep = ''
 
   else if mon.length == 2 or sep.length > 0
-    sep = ' / '
+    sep = '/'
 
   else if mon.length == 1 and mon not in ['0', '1']
     mon = "0#{mon}"
-    sep = ' / '
+    sep = '/'
 
   return mon + sep + year
